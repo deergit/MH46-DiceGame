@@ -35,7 +35,7 @@ const gameState = {
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
 
-        console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
+        // console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
 
         this.gameRunning = true;
         
@@ -59,7 +59,7 @@ const gameState = {
 
         document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
 
-        console.log(`Player ${this.currentPlayer + 1} score: ${this.players[this.currentPlayer].score}`);
+        // console.log(`Player ${this.currentPlayer + 1} score: ${this.players[this.currentPlayer].score}`);
 
         if (this.players[this.currentPlayer].score >= this.scoreLimit) {
             this.win(this.players[this.currentPlayer]);
@@ -113,7 +113,6 @@ const gameState = {
         this.players.forEach((player) => {
             if (!player.out) {
                 eligiblePlayers.push(player);
-                console.log(`PUSHING PLAYER: ${player.id} SCORE: ${player.score}`);
             }
         });
 
@@ -122,7 +121,6 @@ const gameState = {
                 return prev.score > current.score ? prev : current;
             }
         );
-        console.log(`Winner is: ${winner.id}`);
         this.win(winner);
     },
 
