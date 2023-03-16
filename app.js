@@ -42,7 +42,7 @@ const gameState = {
         this.gameRunning = true;
 
         if (this.turn === 1) { document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)"; }
-        
+
         if (this.players.length > 1) {
             if (dieRoll > 1) {
                 this.players[this.currentPlayer].score += dieRoll;
@@ -145,7 +145,7 @@ const gameState = {
 
     reset(kPlayers = false) {
         let pTotal = this.players.length;
-        
+
         this.gameRunning = false;
         this.players = [];
         this.currentPlayer = 0;
@@ -156,7 +156,7 @@ const gameState = {
         dieImage.src = "./images/diceStart.png";
         caption.innerHTML = 'Press + to add<br>more players<br><br><br>Press "Roll"<br>to begin';
 
-        kPlayers ? this.addPlayer(pTotal) : this.addPlayer(); 
+        kPlayers ? this.addPlayer(pTotal) : this.addPlayer();
     }
 }
 
