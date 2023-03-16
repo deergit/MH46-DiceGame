@@ -55,7 +55,9 @@ const gameState = {
         });
         console.log(`remaining players: ${pCount}`);
 
-        if (pCount === 0) {
+        if (pCount === 1 && this.players.length > 1) {
+            
+        } else if (pCount === 0) {
             this.lose();
         }
     },
