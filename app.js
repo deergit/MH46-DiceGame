@@ -78,8 +78,8 @@ const gameState = {
                     recheck = true;
                 }
             } else {
-                this.currentPlayer = 0;
-                recheck = false;
+                nextPlayer = 0;
+                recheck = true;
             }
         } while (recheck)
     },
