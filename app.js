@@ -39,8 +39,6 @@ const gameState = {
         dieImage.src = `./images/${dieRoll}.png`;
         caption.textContent = "";
 
-        // console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
-
         this.gameRunning = true;
 
         if (this.turn === 1) { document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)"; }
@@ -64,8 +62,6 @@ const gameState = {
         }
 
         document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
-
-        // console.log(`Player ${this.currentPlayer + 1} score: ${this.players[this.currentPlayer].score}`);
 
         if (this.players[this.currentPlayer].score >= this.scoreLimit) {
             this.win(this.players[this.currentPlayer]);
@@ -91,7 +87,6 @@ const gameState = {
         let recheck = false;
 
         if (this.players.length > 1) {
-            // console.log(``)
             document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 0, 0, 0.25)";
             do {
                 if (this.players[nextPlayer]) {

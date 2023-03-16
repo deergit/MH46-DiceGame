@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
+* {
+    user-select: none;
+}
+
 :root {
     color: #ebdbb1;
     background-color: #282828;
