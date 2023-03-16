@@ -4,28 +4,33 @@ const playerContainer = document.getElementById("playerContainer");
 const rollBtn = document.getElementById("rollBtn");
 const holdBtn = document.getElementById("holdBtn");
 const addPlrBtn = document.getElementById("addPlrBtn");
+const resetBtn = document.getElementById("resetBtn");
 
 const gameState = {
     players: [],
     gameRunning: false,
     currentPlayer: 0,
 
-    addPlayer() {
+    addPlayer(repeats = 1) {
         if (!this.gameRunning) {
-            this.players.push({ id: this.players.length + 1, score: 0, roll: 0, hold: false, out: false });
+            do {
+                this.players.push({ id: this.players.length + 1, score: 0, roll: 0, hold: false, out: false });
 
-            const newPlayer = document.createElement("div");
+                const newPlayer = document.createElement("div");
 
-            newPlayer.classList.add("playerBox");
-            newPlayer.id = `p${this.players.length}`;
-            newPlayer.innerHTML = `<h2>Player ${this.players.length}</h2>\n<h3>Score: 0</h3>\n<h4>In</h4>`;
+                newPlayer.classList.add("playerBox");
+                newPlayer.id = `p${this.players.length}`;
+                newPlayer.innerHTML = `<h2>Player ${this.players.length}</h2>\n<h3>Score: 0</h3>\n<h4>In</h4>`;
 
-            playerContainer.appendChild(newPlayer);
+                playerContainer.appendChild(newPlayer);
+                repeats--;
+            } while (repeats > 0);
         }
     },
 
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
+        console.log(`Roll: ${dieRoll}`);
 
         this.gameRunning = true;
         
@@ -37,23 +42,11 @@ const gameState = {
 
         document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
 
-        let nextPlayer = this.currentPlayer + 1;
-        let recheck = false;
-
+        console.log(`Player ${this.currentPlayer + 1} score: ${this.players[this.currentPlayer].score}`);
         if (this.players[this.currentPlayer].score >= 20) {
             this.win();
         } else {
-            do {
-                if (!this.players[nextPlayer]) {
-                    this.currentPlayer = 0;
-                } else if (!this.players[nextPlayer].hold && !this.players[nextPlayer].out) {
-                    this.players[nextPlayer] ? this.currentPlayer = nextPlayer : this.currentPlayer = 0;
-                    recheck = false;
-                } else {
-                    nextPlayer++;
-                    recheck = true;
-                }
-            } while (recheck);
+            this.nextTurn();
         }
 
         let pCount = this.players.length;
@@ -64,32 +57,52 @@ const gameState = {
         if (pCount === 0) {
             this.lose();
         }
-        console.log(`Roll: ${dieRoll}`);
-        console.log(`Player ${this.currentPlayer + 1} score: ${this.players[this.currentPlayer].score}`);
     },
 
     hold() {
         this.players[this.currentPlayer].hold = true;
     },
 
+    nextTurn(){
+        let nextPlayer = this.currentPlayer + 1;
+        let recheck = false;
+
+        do {
+            if (this.players[nextPlayer]) {
+                if (!this.players[nextPlayer].hold && !this.players[nextPlayer].out) {
+                    this.currentPlayer = nextPlayer;
+                    recheck = false;
+                } else {
+                    nextPlayer++;
+                    recheck = true;
+                }
+            } else {
+                this.currentPlayer = 0;
+                recheck = false;
+            }
+        } while (recheck)
+    },
+
     win() {
         alert(`Player ${this.currentPlayer + 1} has won the game!`);
-        this.reset();
+        this.reset(true);
     },
 
     lose() {
         alert(`You have lost the game!`);
-        this.reset();
+        this.reset(true);
     },
 
-    reset() {
+    reset(kPlayers = false) {
+        let pCount = this.players.length;
+        
         this.gameRunning = false;
         this.players = [];
         this.currentPlayer = 0;
 
         playerContainer.innerHTML = "";
 
-        this.addPlayer();
+        kPlayers ? this.addPlayer(pCount) : this.addPlayer(); 
     }
 }
 
@@ -103,6 +116,10 @@ holdBtn.addEventListener("click", () => {
 
 addPlrBtn.addEventListener("click", () => {
     gameState.addPlayer();
+});
+
+resetBtn.addEventListener("click", () => {
+    gameState.reset();
 });
 
 gameState.addPlayer();
