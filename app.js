@@ -37,7 +37,8 @@ const gameState = {
         if (dieRoll > 1) {
             this.players[this.currentPlayer].score += dieRoll;
         } else {
-            this.players[this.currentPlayer].out = true;document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Out";
+            this.players[this.currentPlayer].out = true;
+            document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Out";
         }
 
         document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
