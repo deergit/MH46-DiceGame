@@ -41,7 +41,6 @@ const gameState = {
 
         this.gameRunning = true;
 
-        console.log(`turn: ${this.turn}`);
         if (this.turn <= 1) { document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)"; }
 
         if (this.players.length > 1) {
