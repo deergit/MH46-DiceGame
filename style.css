@@ -11,11 +11,13 @@
     font-family: "Special Elite";
 }
 
+#header {
+    margin-bottom: -80px;
+}
+
 #gameContainer {
     display: flex;
     flex-flow: column nowrap;
-
-
 }
 
 #dieContainer {
@@ -35,7 +37,7 @@
 #caption {
     color: #282828;
 
-    font-size: 50px;
+    font-size: 25px;
 
     position: absolute;
     top: 50%;
