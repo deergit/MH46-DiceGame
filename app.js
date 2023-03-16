@@ -8,8 +8,10 @@ const resetBtn = document.getElementById("resetBtn");
 
 const gameState = {
     players: [],
+    scoreLimit: 1000,
     gameRunning: false,
     currentPlayer: 0,
+    pCount: 0,
 
     addPlayer(repeats = 1) {
         if (!this.gameRunning) {
@@ -25,11 +27,14 @@ const gameState = {
                 playerContainer.appendChild(newPlayer);
                 repeats--;
             } while (repeats > 0);
+
+            this.pCount = this.players.length;
         }
     },
 
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
+
         console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
 
         this.gameRunning = true;
@@ -38,33 +43,31 @@ const gameState = {
             this.players[this.currentPlayer].score += dieRoll;
         } else {
             this.players[this.currentPlayer].out = true;
+            this.players[this.currentPlayer].score += dieRoll;
+            this.pCount--;
             document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Out";
+            this.nextTurn();
         }
 
         document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
 
         console.log(`Player ${this.currentPlayer + 1} score: ${this.players[this.currentPlayer].score}`);
-        if (this.players[this.currentPlayer].score >= 20) {
-            this.win();
-        } else {
-            this.nextTurn();
+
+        if (this.players[this.currentPlayer].score >= this.scoreLimit) {
+            this.win(this.players[this.currentPlayer]);
         }
 
-        let pCount = this.players.length;
-        this.players.forEach((player) => {
-            if (player.out || player.hold) { pCount--; }
-        });
-        console.log(`remaining players: ${pCount}`);
-
-        if (pCount === 1 && this.players.length > 1) {
-            this.win();
-        } else if (pCount === 0) {
+        if (this.pCount === 1 && this.players.length > 1) {
+            this.winCheck();
+        } else if (this.pCount === 0) {
             this.lose();
         }
     },
 
     hold() {
         this.players[this.currentPlayer].hold = true;
+        document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Hold";
+        this.nextTurn();
     },
 
     nextTurn(){
@@ -73,7 +76,7 @@ const gameState = {
 
         do {
             if (this.players[nextPlayer]) {
-                if (!this.players[nextPlayer].hold && !this.players[nextPlayer].out) {
+                if (!this.players[nextPlayer].out) {
                     this.currentPlayer = nextPlayer;
                     recheck = false;
                 } else {
@@ -85,10 +88,34 @@ const gameState = {
                 recheck = true;
             }
         } while (recheck)
+
+        if (this.players[this.currentPlayer].hold) {
+            this.players[this.currentPlayer].hold = false;
+            document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "In";
+        }
     },
 
-    win() {
-        alert(`Player ${this.currentPlayer + 1} has won the game!`);
+    winCheck() {
+        let eligiblePlayers = [];
+
+        this.players.forEach((player) => {
+            if (!player.out) {
+                eligiblePlayers.push(player);
+                console.log(`PUSHING PLAYER: ${player.id} SCORE: ${player.score}`);
+            }
+        });
+
+        const winner = eligiblePlayers.reduce(
+            (prev, current) => {
+                return prev.score > current.score ? prev : current;
+            }
+        );
+        console.log(`Winner is: ${winner.id}`);
+        this.win(winner);
+    },
+
+    win(winner) {
+        alert(`Player ${winner.id} has won the game!`);
         this.reset(true);
     },
 
@@ -98,15 +125,16 @@ const gameState = {
     },
 
     reset(kPlayers = false) {
-        let pCount = this.players.length;
+        let pTotal = this.players.length;
         
         this.gameRunning = false;
         this.players = [];
         this.currentPlayer = 0;
+        this.pCount = 0;
 
         playerContainer.innerHTML = "";
 
-        kPlayers ? this.addPlayer(pCount) : this.addPlayer(); 
+        kPlayers ? this.addPlayer(pTotal) : this.addPlayer(); 
     }
 }
 
