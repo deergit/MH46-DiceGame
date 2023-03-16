@@ -1,4 +1,5 @@
 const dieImage = document.getElementById("dieImage");
+const caption = document.getElementById("caption");
 const playerContainer = document.getElementById("playerContainer");
 
 const rollBtn = document.getElementById("rollBtn");
@@ -36,6 +37,7 @@ const gameState = {
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
         dieImage.src = `./images/${dieRoll}.png`;
+        caption.textContent = "";
 
         // console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
 
@@ -157,6 +159,7 @@ const gameState = {
 
         playerContainer.innerHTML = "";
         dieImage.src = "./images/diceStart.png";
+        caption.innerHTML = 'Press + to add<br>more players<br><br><br>Press "Roll"<br>to begin';
 
         kPlayers ? this.addPlayer(pTotal) : this.addPlayer(); 
     }
