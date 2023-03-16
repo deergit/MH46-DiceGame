@@ -56,7 +56,7 @@ const gameState = {
         console.log(`remaining players: ${pCount}`);
 
         if (pCount === 1 && this.players.length > 1) {
-            
+            this.win();
         } else if (pCount === 0) {
             this.lose();
         }
