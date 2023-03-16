@@ -1,0 +1,8 @@
+#playerContainer {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+#playerContainer .playerBox {
+    flex: 1 0 0;
+}
