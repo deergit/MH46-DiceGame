@@ -8,7 +8,7 @@ const resetBtn = document.getElementById("resetBtn");
 
 const gameState = {
     players: [],
-    scoreLimit: 1000,
+    scoreLimit: 20,
     gameRunning: false,
     currentPlayer: 0,
     pCount: 0,
@@ -39,14 +39,22 @@ const gameState = {
 
         this.gameRunning = true;
         
-        if (dieRoll > 1) {
-            this.players[this.currentPlayer].score += dieRoll;
+        if (this.players.length > 1) {
+            if (dieRoll > 1) {
+                this.players[this.currentPlayer].score += dieRoll;
+            } else {
+                this.players[this.currentPlayer].out = true;
+                this.players[this.currentPlayer].score += dieRoll;
+                this.pCount--;
+                document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Out";
+                this.nextTurn();
+            }
         } else {
-            this.players[this.currentPlayer].out = true;
-            this.players[this.currentPlayer].score += dieRoll;
-            this.pCount--;
-            document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Out";
-            this.nextTurn();
+            if (dieRoll > 1) {
+                this.players[this.currentPlayer].score += dieRoll;
+            } else {
+                this.lose();
+            }
         }
 
         document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
@@ -65,33 +73,37 @@ const gameState = {
     },
 
     hold() {
-        this.players[this.currentPlayer].hold = true;
-        document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Hold";
-        this.nextTurn();
+        if (this.players.length > 1) {
+            this.players[this.currentPlayer].hold = true;
+            document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Hold";
+            this.nextTurn();
+        }
     },
 
     nextTurn(){
         let nextPlayer = this.currentPlayer + 1;
         let recheck = false;
 
-        do {
-            if (this.players[nextPlayer]) {
-                if (!this.players[nextPlayer].out) {
-                    this.currentPlayer = nextPlayer;
-                    recheck = false;
+        if (this.players.length > 1) {
+            do {
+                if (this.players[nextPlayer]) {
+                    if (!this.players[nextPlayer].out) {
+                        this.currentPlayer = nextPlayer;
+                        recheck = false;
+                    } else {
+                        nextPlayer++;
+                        recheck = true;
+                    }
                 } else {
-                    nextPlayer++;
+                    nextPlayer = 0;
                     recheck = true;
                 }
-            } else {
-                nextPlayer = 0;
-                recheck = true;
-            }
-        } while (recheck)
+            } while (recheck)
 
-        if (this.players[this.currentPlayer].hold) {
-            this.players[this.currentPlayer].hold = false;
-            document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "In";
+            if (this.players[this.currentPlayer].hold) {
+                this.players[this.currentPlayer].hold = false;
+                document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "In";
+            }
         }
     },
 
@@ -115,8 +127,12 @@ const gameState = {
     },
 
     win(winner) {
-        alert(`Player ${winner.id} has won the game!`);
-        this.reset(true);
+        if (this.players.length > 1) {
+            alert(`Player ${winner.id} has won the game!`);
+            this.reset(true);
+        } else {
+            alert("You have won the game!");
+        }
     },
 
     lose() {
