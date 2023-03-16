@@ -12,6 +12,7 @@ const gameState = {
     gameRunning: false,
     currentPlayer: 0,
     pCount: 0,
+    turn: 1,
 
     addPlayer(repeats = 1) {
         if (!this.gameRunning) {
@@ -38,6 +39,8 @@ const gameState = {
         // console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
 
         this.gameRunning = true;
+
+        if (this.turn === 1) { document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)"; }
         
         if (this.players.length > 1) {
             if (dieRoll > 1) {
@@ -85,9 +88,12 @@ const gameState = {
         let recheck = false;
 
         if (this.players.length > 1) {
+            // console.log(``)
+            document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 0, 0, 0.25)";
             do {
                 if (this.players[nextPlayer]) {
                     if (!this.players[nextPlayer].out) {
+                        document.getElementById(`p${nextPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)";
                         this.currentPlayer = nextPlayer;
                         recheck = false;
                     } else {
@@ -145,6 +151,7 @@ const gameState = {
         this.players = [];
         this.currentPlayer = 0;
         this.pCount = 0;
+        this.turn = 1;
 
         playerContainer.innerHTML = "";
 
@@ -154,10 +161,12 @@ const gameState = {
 
 rollBtn.addEventListener("click", () => {
     gameState.roll();
+    gameState.turn++;
 });
 
 holdBtn.addEventListener("click", () => {
     gameState.hold();
+    gameState.turn++;
 });
 
 addPlrBtn.addEventListener("click", () => {
