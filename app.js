@@ -13,7 +13,7 @@ const gameState = {
     gameRunning: false,
     currentPlayer: 0,
     pCount: 0,
-    turn: 1,
+    turn: 0,
 
     addPlayer(repeats = 1) {
         if (!this.gameRunning) {
@@ -41,7 +41,8 @@ const gameState = {
 
         this.gameRunning = true;
 
-        if (this.turn === 1) { document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)"; }
+        console.log(`turn: ${this.turn}`);
+        if (this.turn <= 1) { document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)"; }
 
         if (this.players.length > 1) {
             if (dieRoll > 1) {
@@ -150,7 +151,7 @@ const gameState = {
         this.players = [];
         this.currentPlayer = 0;
         this.pCount = 0;
-        this.turn = 1;
+        this.turn = 0;
 
         playerContainer.innerHTML = "";
         dieImage.src = "./images/diceStart.png";
