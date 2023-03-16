@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
 :root {
     color: #ebdbb1;
     background-color: #282828;
+
+    font-family: "Special Elite";
 }
 
 #gameContainer {
@@ -26,6 +30,8 @@
 
 #caption {
     color: #282828;
+
+    font-size: 50px;
     
     position: absolute;
     top: 50%;
@@ -40,9 +46,19 @@
     justify-content: space-around;
 }
 
-#controlBar button {
+#controlBar .button {
+    width: 100px;
+
+    text-align: center;
+    
     margin: 20px;
-    padding: 10px 25px 10px 25px;
+    padding: 25px 45px 20px 45px;
+
+    font-size: 30px;
+
+    border-radius: 10px;
+
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #playerContainer {
@@ -53,11 +69,17 @@
 }
 
 #playerContainer .playerBox {
+    height: 200px;
+
+    max-width: 400px;
+    
     text-align: center;
+    text-anchor: middle;
     
     flex: 1 0 0;
 
     border-radius: 10px;
+    padding-top: 60px;
     margin: 30px;
 
     background-color: rgba(0, 0, 0, 0.25);
