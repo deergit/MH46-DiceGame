@@ -30,7 +30,7 @@ const gameState = {
 
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
-        console.log(`Roll: ${dieRoll}`);
+        console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
 
         this.gameRunning = true;
         
@@ -53,6 +53,7 @@ const gameState = {
         this.players.forEach((player) => {
             if (player.out || player.hold) { pCount--; }
         });
+        console.log(`remaining players: ${pCount}`);
 
         if (pCount === 0) {
             this.lose();
@@ -119,7 +120,9 @@ addPlrBtn.addEventListener("click", () => {
 });
 
 resetBtn.addEventListener("click", () => {
-    gameState.reset();
+    if (!gameState.gameRunning) {
+        gameState.reset();
+    }
 });
 
 gameState.addPlayer();
