@@ -3,6 +3,22 @@
     background-color: #282828;
 }
 
+#gameContainer {
+    display: flex;
+    flex-flow: column nowrap;
+
+
+}
+
+#dieContainer {
+    width: 100%;
+}
+
+#dieImage {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #controlBar {
     display: flex;
     flex-flow: row nowrap;

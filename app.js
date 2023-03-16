@@ -35,6 +35,7 @@ const gameState = {
 
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
+        dieImage.src = `./images/${dieRoll}.png`;
 
         // console.log(`Player ${this.currentPlayer + 1} rolled: ${dieRoll}`);
 
@@ -136,6 +137,7 @@ const gameState = {
             this.reset(true);
         } else {
             alert("You have won the game!");
+            this.reset(true);
         }
     },
 
@@ -154,6 +156,7 @@ const gameState = {
         this.turn = 1;
 
         playerContainer.innerHTML = "";
+        dieImage.src = "./images/diceStart.png";
 
         kPlayers ? this.addPlayer(pTotal) : this.addPlayer(); 
     }
