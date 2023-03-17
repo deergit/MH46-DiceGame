@@ -36,6 +36,13 @@ const gameState = {
 
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
+
+        // for (let i = 0; i < 10; i++) {
+        //     setTimeout(() => {
+        //         dieImage.src = `./images/${Math.ceil(Math.random() * 6)}.png`;
+        //     }, 200);
+        // }
+
         dieImage.src = `./images/${dieRoll}.png`;
         caption.textContent = "";
 
@@ -133,13 +140,13 @@ const gameState = {
             dieImage.src = "./images/diceStart.png";
             caption.innerHTML = `Player ${winner.id}<br>has won<br>the game!`;
             setTimeout(() => {
-                this.reset(true);    
+                this.reset(true);
             }, 3000);
         } else {
             dieImage.src = "./images/diceStart.png";
             caption.innerHTML = `You<br>have won<br>the game!`;
             setTimeout(() => {
-                this.reset(true);    
+                this.reset(true);
             }, 3000);
         }
     },
@@ -148,7 +155,7 @@ const gameState = {
         dieImage.src = "./images/diceStart.png";
         caption.innerHTML = 'You have lost<br>the game';
         setTimeout(() => {
-            this.reset(true);    
+            this.reset(true);
         }, 3000);
     },
 
