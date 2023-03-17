@@ -130,17 +130,26 @@ const gameState = {
 
     win(winner) {
         if (this.players.length > 1) {
-            alert(`Player ${winner.id} has won the game!`);
-            this.reset(true);
+            dieImage.src = "./images/diceStart.png";
+            caption.innerHTML = `Player ${winner.id}<br>has won<br>the game!`;
+            setTimeout(() => {
+                this.reset(true);    
+            }, 3000);
         } else {
-            alert("You have won the game!");
-            this.reset(true);
+            dieImage.src = "./images/diceStart.png";
+            caption.innerHTML = `You<br>have won<br>the game!`;
+            setTimeout(() => {
+                this.reset(true);    
+            }, 3000);
         }
     },
 
     lose() {
-        alert(`You have lost the game!`);
-        this.reset(true);
+        dieImage.src = "./images/diceStart.png";
+        caption.innerHTML = 'You have lost<br>the game';
+        setTimeout(() => {
+            this.reset(true);    
+        }, 3000);
     },
 
     reset(kPlayers = false) {
@@ -166,8 +175,10 @@ rollBtn.addEventListener("click", () => {
 });
 
 holdBtn.addEventListener("click", () => {
-    gameState.hold();
-    gameState.turn++;
+    if (gameState.gameRunning) {
+        gameState.hold();
+        gameState.turn++;
+    }
 });
 
 addPlrBtn.addEventListener("click", () => {
