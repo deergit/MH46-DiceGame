@@ -37,12 +37,6 @@ const gameState = {
     roll() {
         let dieRoll = Math.ceil(Math.random() * 6);
 
-        // for (let i = 0; i < 10; i++) {
-        //     setTimeout(() => {
-        //         dieImage.src = `./images/${Math.ceil(Math.random() * 6)}.png`;
-        //     }, 200);
-        // }
-
         dieImage.src = `./images/${dieRoll}.png`;
         caption.textContent = "";
 
