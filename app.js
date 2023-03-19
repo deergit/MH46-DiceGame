@@ -7,6 +7,15 @@ const holdBtn = document.getElementById("holdBtn");
 const addPlrBtn = document.getElementById("addPlrBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+rollBtn.disabled = false;
+rollBtn.hidden = false;
+holdBtn.disabled = true;
+holdBtn.hidden = true;
+addPlrBtn.disabled = false;
+addPlrBtn.hidden = false;
+resetBtn.disabled = false;
+resetBtn.hidden = false;
+
 const gameState = {
     players: [],
     scoreLimit: 20,
@@ -14,6 +23,7 @@ const gameState = {
     currentPlayer: 0,
     pCount: 0,
     turn: 0,
+    turnTimer: 2000,
 
     addPlayer(repeats = 1) {
         if (!this.gameRunning) {
@@ -35,44 +45,73 @@ const gameState = {
     },
 
     roll() {
-        let dieRoll = Math.ceil(Math.random() * 6);
-
-        dieImage.src = `./images/${dieRoll}.png`;
-        caption.textContent = "";
-
         this.gameRunning = true;
+        caption.textContent = "";
+        resetBtn.textContent = "Quit";
+        dieImage.style.border = "none";
+
+        rollBtn.disabled = true;
+        rollBtn.hidden = false;
+        resetBtn.disabled = true;
+        holdBtn.disabled = true;
+
+        if (this.players.length > 1) { holdBtn.hidden = false; }
+
+        addPlrBtn.disabled = true;
+        addPlrBtn.hidden = true;
 
         if (this.turn <= 1) { document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)"; }
 
-        if (this.players.length > 1) {
+        let dieRoll = Math.ceil(Math.random() * 6);
+
+        let di = 30;
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                dieImage.src = `./images/${Math.ceil(Math.random() * 6)}.png`;
+            }, di);
+            di += (di / 2);
+        }
+
+        setTimeout(() => {
+            dieImage.src = `./images/${dieRoll}.png`;
+
             if (dieRoll > 1) {
                 this.players[this.currentPlayer].score += dieRoll;
-            } else {
+                dieImage.style.border = "8px solid rgba(0, 100, 0, 0.5)";
+                rollBtn.disabled = false;
+                resetBtn.disabled = false;
+                holdBtn.disabled = false;
+            } else if (this.players.length > 1) {
                 this.players[this.currentPlayer].out = true;
                 this.players[this.currentPlayer].score += dieRoll;
                 this.pCount--;
+                dieImage.style.border = "8px solid rgba(100, 0, 0, 0.5)";
+                document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(100, 0, 0, 0.25)";
                 document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Out";
-                this.nextTurn();
-            }
-        } else {
-            if (dieRoll > 1) {
-                this.players[this.currentPlayer].score += dieRoll;
+                setTimeout(() => {
+                    this.nextTurn();
+                }, this.turnTimer);
             } else {
-                this.lose();
+                dieImage.style.border = "8px solid rgba(100, 0, 0, 0.5)";
+                setTimeout(() => {
+                    this.lose();
+                }, 250);
             }
-        }
 
-        document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
+            document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h3").textContent = `Score: ${this.players[this.currentPlayer].score}`;
 
-        if (this.players[this.currentPlayer].score >= this.scoreLimit) {
-            this.win(this.players[this.currentPlayer]);
-        }
+            if (this.players[this.currentPlayer].score >= this.scoreLimit) {
+                setTimeout(() => {
+                    this.win(this.players[this.currentPlayer]);
+                }, 250);
+            }
 
-        if (this.pCount === 1 && this.players.length > 1) {
-            this.winCheck();
-        } else if (this.pCount === 0) {
-            this.lose();
-        }
+            if (this.players.length > 1 && this.pCount === 1) {
+                setTimeout(() => {
+                    this.win(this.players[this.currentPlayer]);
+                }, 250);
+            }
+        }, this.turnTimer);
     },
 
     hold() {
@@ -86,71 +125,93 @@ const gameState = {
     nextTurn(){
         let nextPlayer = this.currentPlayer + 1;
         let recheck = false;
+        dieImage.style.border = "none";
+        rollBtn.disabled = false;
+        resetBtn.disabled = false;
+        holdBtn.disabled = false;
+        holdBtn.hidden = false;
 
-        if (this.players.length > 1) {
-            document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 0, 0, 0.25)";
-            do {
-                if (this.players[nextPlayer]) {
-                    if (!this.players[nextPlayer].out) {
-                        document.getElementById(`p${nextPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)";
-                        this.currentPlayer = nextPlayer;
-                        recheck = false;
-                    } else {
-                        nextPlayer++;
-                        recheck = true;
-                    }
+        document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(0, 0, 0, 0.25)";
+        do {
+            if (this.players[nextPlayer]) {
+                if (!this.players[nextPlayer].out) {
+                    document.getElementById(`p${nextPlayer + 1}`).style.backgroundColor = "rgba(0, 100, 0, 0.25)";
+                    this.currentPlayer = nextPlayer;
+                    recheck = false;
                 } else {
-                    nextPlayer = 0;
+                    nextPlayer++;
                     recheck = true;
                 }
-            } while (recheck)
-
-            if (this.players[this.currentPlayer].hold) {
-                this.players[this.currentPlayer].hold = false;
-                document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "In";
+            } else {
+                nextPlayer = 0;
+                recheck = true;
             }
+        } while (recheck)
+
+        if (this.players[this.currentPlayer].hold) {
+            this.players[this.currentPlayer].hold = false;
+            document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "In";
         }
     },
 
-    winCheck() {
-        let eligiblePlayers = [];
+    // winCheck() {
+    //     let eligiblePlayers = [];
 
-        this.players.forEach((player) => {
-            if (!player.out) {
-                eligiblePlayers.push(player);
-            }
-        });
+    //     this.players.forEach((player) => {
+    //         if (!player.out) {
+    //             eligiblePlayers.push(player);
+    //         }
+    //     });
 
-        const winner = eligiblePlayers.reduce(
-            (prev, current) => {
-                return prev.score > current.score ? prev : current;
-            }
-        );
-        this.win(winner);
-    },
+    //     const winner = eligiblePlayers.reduce(
+    //         (prev, current) => {
+    //             return prev.score > current.score ? prev : current;
+    //         }
+    //     );
+    //     this.win(winner);
+    // },
 
     win(winner) {
+        rollBtn.disabled = true;
+        rollBtn.hidden = false;
+        holdBtn.disabled = true;
+        holdBtn.hidden = true;
+        resetBtn.disabled = true;
+        resetBtn.hidden = false;
+
+        resetBtn.textContent = "Reset";
+
         if (this.players.length > 1) {
             dieImage.src = "./images/diceStart.png";
             caption.innerHTML = `Player ${winner.id}<br>has won<br>the game!`;
             setTimeout(() => {
                 this.reset(true);
-            }, 3000);
+            }, this.turnTimer);
         } else {
             dieImage.src = "./images/diceStart.png";
             caption.innerHTML = `You<br>have won<br>the game!`;
             setTimeout(() => {
                 this.reset(true);
-            }, 3000);
+            }, this.turnTimer);
         }
     },
 
     lose() {
+        rollBtn.disabled = true;
+        rollBtn.hidden = false;
+        holdBtn.disabled = true;
+        holdBtn.hidden = true;
+        resetBtn.disabled = true;
+        resetBtn.hidden = false;
+
+        resetBtn.textContent = "Reset";
+
         dieImage.src = "./images/diceStart.png";
         caption.innerHTML = 'You have lost<br>the game';
+        document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(100, 0, 0, 0.25)";
         setTimeout(() => {
             this.reset(true);
-        }, 3000);
+        }, this.turnTimer);
     },
 
     reset(kPlayers = false) {
@@ -162,8 +223,20 @@ const gameState = {
         this.pCount = 0;
         this.turn = 0;
 
+        rollBtn.disabled = false;
+        rollBtn.hidden = false;
+        holdBtn.disabled = true;
+        holdBtn.hidden = true;
+        addPlrBtn.disabled = false;
+        addPlrBtn.hidden = false;
+        resetBtn.disabled = false;
+        resetBtn.hidden = false;
+
+        resetBtn.textContent = "Reset";
+
         playerContainer.innerHTML = "";
         dieImage.src = "./images/diceStart.png";
+        dieImage.style.border = "none";
         caption.innerHTML = 'Press + to add<br>more players<br><br><br>Press "Roll"<br>to begin';
 
         kPlayers ? this.addPlayer(pTotal) : this.addPlayer();
@@ -176,10 +249,8 @@ rollBtn.addEventListener("click", () => {
 });
 
 holdBtn.addEventListener("click", () => {
-    if (gameState.gameRunning) {
-        gameState.hold();
-        gameState.turn++;
-    }
+    gameState.hold();
+    gameState.turn++;
 });
 
 addPlrBtn.addEventListener("click", () => {
@@ -187,9 +258,7 @@ addPlrBtn.addEventListener("click", () => {
 });
 
 resetBtn.addEventListener("click", () => {
-    if (!gameState.gameRunning) {
-        gameState.reset();
-    }
+    gameState.reset();
 });
 
 gameState.addPlayer();
