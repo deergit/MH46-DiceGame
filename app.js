@@ -36,6 +36,13 @@ const gameState = {
                 newPlayer.id = `p${this.players.length}`;
                 newPlayer.innerHTML = `<h2 contenteditable="true">Player ${this.players.length}</h2>\n<h3>Score: 0</h3>\n<h4>In</h4>`;
 
+                newPlayer.firstChild.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        document.activeElement.blur();
+                    }
+                });
+
                 playerContainer.appendChild(newPlayer);
                 repeats--;
             } while (repeats > 0);
