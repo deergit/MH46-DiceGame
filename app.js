@@ -43,6 +43,20 @@ const gameState = {
                     }
                 });
 
+                newPlayer.firstChild.addEventListener("focus", () => {
+                    if (window.getSelection && document.createRange) {
+                        let range = document.createRange();
+                        range.selectNodeContents(newPlayer.firstChild);
+                        let sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    } else if (document.body.createTextRange) {
+                        let range = document.body.createTextRange();
+                        range.moveToElementText(newPlayer.firstChild);
+                        range.select();
+                    }
+                });
+
                 playerContainer.appendChild(newPlayer);
                 repeats--;
             } while (repeats > 0);
