@@ -18,7 +18,7 @@ resetBtn.hidden = false;
 
 const gameState = {
     players: [],
-    scoreLimit: 20,
+    scoreLimit: 2000,
     gameRunning: false,
     currentPlayer: 0,
     pCount: 0,
@@ -108,6 +108,7 @@ const gameState = {
 
             if (this.players.length > 1 && this.pCount === 1) {
                 setTimeout(() => {
+                    this.nextTurn();
                     this.win(this.players[this.currentPlayer]);
                 }, 250);
             }
