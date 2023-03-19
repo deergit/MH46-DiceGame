@@ -181,20 +181,15 @@ const gameState = {
 
     lose() {
         rollBtn.disabled = true;
-        rollBtn.hidden = false;
+        rollBtn.hidden = true;
         holdBtn.disabled = true;
         holdBtn.hidden = true;
-        resetBtn.disabled = true;
+        resetBtn.disabled = false;
         resetBtn.hidden = false;
-
-        resetBtn.textContent = "Reset";
 
         dieImage.src = "./images/diceStart.png";
         caption.innerHTML = 'You have lost<br>the game';
         document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(100, 0, 0, 0.25)";
-        setTimeout(() => {
-            this.reset();
-        }, this.turnTimer);
     },
 
     reset(kPlayers = true) {
@@ -252,7 +247,11 @@ addPlrBtn.addEventListener("click", () => {
 });
 
 resetBtn.addEventListener("click", () => {
-    gameState.reset(false);
+    if (gameState.gameRunning) {
+        gameState.reset();
+    } else {
+        gameState.reset(false);
+    }
 });
 
 gameState.addPlayer();
