@@ -77,7 +77,7 @@ const gameState = {
 
             if (dieRoll > 1) {
                 this.players[this.currentPlayer].score += dieRoll;
-                dieImage.style.border = "8px solid rgba(0, 100, 0, 0.5)";
+                dieImage.style.border = "16px solid rgba(0, 100, 0, 0.5)";
                 rollBtn.disabled = false;
                 resetBtn.disabled = false;
                 holdBtn.disabled = false;
@@ -85,14 +85,14 @@ const gameState = {
                 this.players[this.currentPlayer].out = true;
                 this.players[this.currentPlayer].score += dieRoll;
                 this.pCount--;
-                dieImage.style.border = "8px solid rgba(100, 0, 0, 0.5)";
+                dieImage.style.border = "16px solid rgba(100, 0, 0, 0.5)";
                 document.getElementById(`p${this.currentPlayer + 1}`).style.backgroundColor = "rgba(100, 0, 0, 0.25)";
                 document.getElementById(`p${this.currentPlayer + 1}`).querySelector("h4").textContent = "Out";
                 setTimeout(() => {
                     this.nextTurn();
                 }, this.turnTimer);
             } else {
-                dieImage.style.border = "8px solid rgba(100, 0, 0, 0.5)";
+                dieImage.style.border = "16px solid rgba(100, 0, 0, 0.5)";
                 setTimeout(() => {
                     this.lose();
                 }, 250);
