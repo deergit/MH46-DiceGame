@@ -18,7 +18,7 @@ resetBtn.hidden = false;
 
 const gameState = {
     players: [],
-    scoreLimit: 2000,
+    scoreLimit: 20,
     gameRunning: false,
     currentPlayer: 0,
     pCount: 0,
