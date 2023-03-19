@@ -154,23 +154,6 @@ const gameState = {
         }
     },
 
-    // winCheck() {
-    //     let eligiblePlayers = [];
-
-    //     this.players.forEach((player) => {
-    //         if (!player.out) {
-    //             eligiblePlayers.push(player);
-    //         }
-    //     });
-
-    //     const winner = eligiblePlayers.reduce(
-    //         (prev, current) => {
-    //             return prev.score > current.score ? prev : current;
-    //         }
-    //     );
-    //     this.win(winner);
-    // },
-
     win(winner) {
         rollBtn.disabled = true;
         rollBtn.hidden = false;
